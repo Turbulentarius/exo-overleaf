@@ -2,7 +2,7 @@
 Files needed for deployment of Overleaf into the exo-docker environment
 
 Overleaf can be customized and launched via Docker. In this case I am deploying in a Docker environment that used Traefik to manage the *virtual hosts*
-and automatically handle **Let's Encrypt** certificates, so I needed to modify the official **overleaf/overleaf** `docker-compose.yml`; to acomplish this I added a docker-compose.override.yml
+and automatically handle **Let's Encrypt** certificates, so I needed to modify the official **overleaf/overleaf** `docker-compose.yml`; to acomplish this I added a `docker-compose.override.yml`
 
 Port `80` is already bound by Traefik on my server, so I needed to override the ports for *sharelatex*. This can be done like so:
 ```
