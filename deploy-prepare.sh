@@ -14,11 +14,10 @@ git clone "$REPO_URL" "$OVERLEAF_DIR"
 
 cp "$OVERRIDE_FILE" "$OVERLEAF_DIR/"
 
-echo "Copying Overleaf service file to /etc/systemd/system/..."
-sudo cp "./overleaf.service" "/etc/systemd/system/"
-
-echo "Copying Overleaf service file to /etc/systemd/system/..."
-sudo cp "./overleaf.service" "/etc/systemd/system/"
+if [ ! -f "/etc/systemd/system/overleaf.service" ]; then
+    echo "Copying Overleaf service file to /etc/systemd/system/"
+    sudo cp "./overleaf.service" "/etc/systemd/system/"
+fi
 
 echo "Reloading systemd and enabling service..."
 sudo systemctl daemon-reload
