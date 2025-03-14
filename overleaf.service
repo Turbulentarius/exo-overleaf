@@ -1,0 +1,16 @@
+[Unit]
+Description=Runs my Overleaf stuff
+After=docker.service exoplan.service
+Requires=docker.service exoplan.service
+
+[Service]
+WorkingDirectory=/home/exolord/contained/overleaf
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+User=exolord
+Group=exoplanners
+Restart=always
+RestartSec=20s
+
+[Install]
+WantedBy=multi-user.target
