@@ -6,7 +6,7 @@ and automatically handle **Let's Encrypt** certificates, so I needed to modify t
 
 Port `80` is already bound by Traefik on my server, so I needed to override the ports for *sharelatex*. This can be done like so:
 ```
-        ports: !reset []
+ports: !reset []
 ```
 
 ## Errors
@@ -15,7 +15,7 @@ Port `80` is already bound by Traefik on my server, so I needed to override the 
 
 This happens because sharelatex is already bound to port 80, in order to fix it you can simply override the port in `docker-compose.override.yml`:
 ```
-  ports: !reset []
+ports: !reset []
 ```
 **Note.** It is not enough to simply write `ports: []`, and so, the `docker-compose.override.yml` actually does not work like you would intuitively expect it to. Instead we are forced to use YAML tags `!reset` and `!override`, as documented here: https://docs.docker.com/reference/compose-file/merge/#replace-value
 
