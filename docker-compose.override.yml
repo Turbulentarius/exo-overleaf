@@ -1,0 +1,47 @@
+networks:
+  overleaf_network_internal:
+    name: overleaf_network_internal
+    internal: true
+  exo_network_external:
+    name: exo_network_external
+
+services:
+    sharelatex:
+        networks:
+            - overleaf_network_internal
+            - exo_network_external
+        ports: !reset []
+        expose:
+            - "2400"
+        labels:
+          traefik.enable: true
+          traefik.http.routers.overleaf.entryPoints: 'web'
+          traefik.http.routers.overleaf.rule: 'Host(`overleaf.beamtic.com`)'
+          traefik.http.middlewares.overleaf-redirect.redirectscheme.scheme: 'https'
+          traefik.http.middlewares.overleaf-redirect.redirectscheme.permanent: true
+          traefik.http.routers.overleaf.middlewares: 'overleaf-redirect, exoheaders'
+          traefik.http.routers.overleaf-secure.entryPoints: 'websecure'
+          traefik.http.routers.overleaf-secure.rule: 'Host(`overleaf.beamtic.com`)'
+          traefik.http.routers.overleaf-secure.tls: true
+          traefik.http.routers.overleaf-secure.tls.certresolver: 'letsencrypt'
+          traefik.http.middlewares.exoheaders.headers.stsSeconds: 15552000
+          traefik.http.middlewares.exoheaders.headers.forceSTSHeader: true
+          traefik.http.services.overleaf.loadbalancer.server.port: 80
+        volumes:
+            - ~/sharelatex_data:/var/lib/overleaf
+            - ~/texlive_data:/usr/local/texlive
+        environment:
+            OVERLEAF_REDIS_HOST: overleaf-redis
+            REDIS_HOST: overleaf-redis
+    mongo:
+        networks:
+            - overleaf_network_internal
+        volumes:
+            - ~/mongo_data:/data/db
+            - ./server-ce/mongodb-init-replica-set.js:/docker-entrypoint-initdb.d/mongodb-init-replica-set.js
+    redis:
+        networks:
+            - overleaf_network_internal
+        container_name: overleaf-redis
+        volumes:
+            - ~/redis_data:/data
