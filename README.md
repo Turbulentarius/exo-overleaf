@@ -2,14 +2,43 @@
 Files needed for deployment of Overleaf into the exo-docker environment
 
 Overleaf can be customized and launched via Docker. In this case I am deploying in a Docker environment that used Traefik to manage the *virtual hosts*
-and automatically handle **Let's Encrypt** certificates, so I needed to modify the official **overleaf/overleaf** `docker-compose.yml`; to acomplish this I added a `docker-compose.override.yml`
+and automatically handle **Let's Encrypt** certificates, so I needed to modify the official **overleaf/overleaf** `docker-compose.yml`; to acomplish this I added a `docker-compose.override.yml`.
+
+The `docker-compose.override.yml` is automatically applied when running `docker compose up`.
+
+## Overrides for Traefik
+If you are handling virtual hosts with a proxy like Traefik or Nginx, then you might need to reset the port binding of the sharrelatex container.
 
 Port `80` is already bound by Traefik on my server, so I needed to override the ports for *sharelatex*. This can be done like so:
 ```
 ports: !reset []
 ```
 
-## Errors
+This is more or less the only needed change to run Overleaf in a Traefik environment.
+
+## How to install LaTeX packeges.
+
+When I first installed Overleaf and tried to use various packages, I was surprised to find they were missing.
+
+Packages can be installed by running these commands once the Overleaf environment is running:
+```
+docker exec -it sharelatex bash
+wget https://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh
+sh update-tlmgr-latest.sh
+```
+This may be needed to update the TeX Live environment, which is installed inside the container.
+
+Now we can install missing packages like so:
+```
+tlmgr install titling
+```
+
+**Note.** `~/texlive_data:/usr/local/texlive` is added as a volume in `docker-compose.override.yml`
+in order for installed packages to persist between builds.
+
+
+## Errors and solutions
+Various errors I encountered while developing my `docker-compose.override.yml`.
 
 > failed to set up container networking: driver failed programming external connectivity on endpoint sharelatex ...  Bind for 0.0.0.0:80 failed: port is already allocated
 
