@@ -70,8 +70,10 @@ redis:
 According to some online discussions, this might happen due to connectivity issues, and refreshing the browser should fix it. However, this was not the case for me.
 
 For me, this error was shown in the front-end because the file permissions had somehow changed inside my container, and both of these:
+
 - `/var/lib/overleaf/data/compiles/`
 - `/var/lib/overleaf/data/output/`
+
 Had somehow become owned by **ubuntu** instead of **www-data**. I fixed it by running these commands inside my container:
 ```
 chown -R www-data:www-data /var/lib/overleaf/data/compiles/*
