@@ -83,6 +83,6 @@ chmod -R 755 /var/lib/overleaf/data/output/*
 ```
 But, this could also happen if your TeX Live installation has somehow been messed up.
 
-E.g. ChatGPT originally suggested to me that I volume mounted `~/texlive_data:/usr/local/texlive`  to make newly installed packages persist between restarts; it would work in theory, but it will be completely cleard and you will have to reinstall everything that was already installed in the sharelatex image, or install TeX Live on your host. Not ideal.
+E.g. ChatGPT originally suggested to me that I volume mounted `~/texlive_data:/usr/local/texlive`  to make newly installed packages persist between restarts; it would work in theory, but it will be completely cleared and you will have to reinstall everything that was already installed in the sharelatex image, or install TeX Live on your host. Not ideal.
 
 Instead, I settled on creating a custom dockerfile where I install additional packeges not included in the base sharelatex image.
