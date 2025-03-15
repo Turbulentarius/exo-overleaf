@@ -37,9 +37,7 @@ Now we can install missing packages like so:
 tlmgr install titling
 ```
 
-**Note.** `~/texlive_data:/usr/local/texlive` is added as a volume in `docker-compose.override.yml`
-in order for installed packages to persist between builds.
-
+To make the changes persist between restarts, I created a custom dockerfile, `exooverleaf.dockerfile`, and added it to the `docker-compose.override.yml` file.
 
 ## Errors and solutions
 Various errors I encountered while developing my `docker-compose.override.yml`.
