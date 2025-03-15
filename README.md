@@ -66,6 +66,7 @@ redis:
 ```
 
 >  Sorry, something went wrong and your project could not be compiled. Please try again in a few moments.
+
 According to some online discussions, this might happen due to connectivity issues, and refreshing the browser should fix it. However, this was not the case for me.
 
 For me, this error was shown in the front-end because the file permissions had somehow changed inside my container, and both of these:
