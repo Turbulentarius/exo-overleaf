@@ -64,3 +64,22 @@ redis:
     volumes:
         - ~/redis_data:/data
 ```
+
+>  Sorry, something went wrong and your project could not be compiled. Please try again in a few moments.
+According to some online discussions, this might happen due to connectivity issues, and refreshing the browser should fix it. However, this was not the case for me.
+
+For me, this error was shown in the front-end because the file permissions had somehow changed inside my container, and both of these:
+- `/var/lib/overleaf/data/compiles/`
+- `/var/lib/overleaf/data/output/`
+Had somehow become owned by **ubuntu** instead of **www-data**. I fixed it by running these commands inside my container:
+```
+chown -R www-data:www-data /var/lib/overleaf/data/compiles/*
+chmod -R 755 /var/lib/overleaf/data/compiles/*
+chown -R www-data:www-data /var/lib/overleaf/data/output/*
+chmod -R 755 /var/lib/overleaf/data/output/*
+```
+But, this could also happen if your TeX Live installation has somehow been messed up.
+
+E.g. ChatGPT originally suggested to me that I volume mounted `~/texlive_data:/usr/local/texlive`  to make newly installed packages persist between restarts; it would work in theory, but it will be completely cleard and you will have to reinstall everything that was already installed in the sharelatex image, or install TeX Live on your host. Not ideal.
+
+Instead, I settled on creating a custom dockerfile where I install additional packeges not included in the base sharelatex image.
